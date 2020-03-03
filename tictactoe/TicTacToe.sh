@@ -9,6 +9,7 @@ NOOFCOL=3
 #VARIABLES
 declare -A board
 letter=$((RANDOM%2))
+toss=$((RANDOM%2))
 
 
 function resetBoard(){
@@ -32,5 +33,15 @@ function assignLetter(){
 	fi
 }
 
+function toss(){
+	if (( $toss == 1 ))
+	then
+		echo "player1 won the toss"
+	else
+		echo "player2 won the toss"
+	fi
+}
+
 resetBoard
 assignLetter
+toss
