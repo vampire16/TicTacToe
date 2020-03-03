@@ -63,7 +63,58 @@ function getBoard(){
    done
 }
 
+function checkWin(){
+	playerLetter=$1
+	row=0
+	column=0
+	flag=false
+
+	while [ $column -lt $NOOFCOL ]
+	do
+		if [[ ${board[$row,$column]}${board[$(($row+1)),$column]}${board[$(($row+2)),$column]} == $playerLetter$playerLetter$playerLetter ]]
+		then
+			flag=true
+			echo "$flag"
+		fi
+		((column++))
+	done
+
+	row=0
+	column=0
+
+	while [ $row -lt $NOOFROW ]
+	do
+		if [[ ${board[$row,$column]}${board[$row,$(($column+1))]}${board[$row,$(($column+2))]} == $playerLetter$playerLetter$playerLetter ]]
+		then
+			flag=true
+			echo "$flag"
+		fi
+		((row++))
+	done
+
+	row=0
+	column=0
+
+	if [[ ${board[$row,$column]}${board[$(($row+1)),$(($column+1))]}${board[$(($row+2)),$(($column+2))]} == $playerLetter$playerLetter$playerLetter ]]
+	then
+		flag=true
+		echo "$flag"
+	fi
+
+	row=0
+	column=$(($column+2))
+
+	if [[ ${board[$row,$column]}${board[$(($row+1)),$(($column-1))]}${board[$(($row+2)),$(($column-2))]} == $playerLetter$playerLetter$playerLetter ]]
+	then
+		flag=true
+		echo "$flag"
+	fi
+
+	echo "$flag"
+}
+
 resetBoard
 assignLetter
 toss
 getBoard
+checkWin $player1
