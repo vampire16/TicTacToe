@@ -111,41 +111,31 @@ function checkWin(){
 }
 
 function playerTurn(){
+	count=1
 	if [[ $playCount == $TOTALCOUNT ]]
 	then
 		echo "Match tie"
+		exit
 	fi
 	printf "player turn\n"
 	read -p "Enter position : " pos
-	case $pos in
-	1)
-		if [[ ${board[0,0]} == " " ]]; then board[0,0]=$player; else printf "invalid position" playerTurn; fi
-		;;
-	2)
-      if [[ ${board[0,1]} == " " ]]; then board[0,1]=$player; else printf "invalid position" playerTurn; fi
-      ;;
-	3)
-      if [[ ${board[0,2]} == " " ]]; then board[0,2]=$player; else printf "invalid position" playerTurn; fi
-      ;;
-	4)
-      if [[ ${board[1,0]} == " " ]]; then board[1,0]=$player; else printf "invalid position" playerTurn; fi
-      ;;
-	5)
-      if [[ ${board[1,1]} == " " ]]; then board[1,1]=$player; else printf "invalid position" playerTurn; fi
-      ;;
-	6)
-      if [[ ${board[1,2]} == " " ]]; then board[1,2]=$player; else printf "invalid position" playerTurn; fi
-      ;;
-	7)
-      if [[ ${board[2,0]} == " " ]]; then board[2,0]=$player; else printf "invalid position" playerTurn; fi
-      ;;
-	8)
-      if [[ ${board[2,1]} == " " ]]; then board[2,1]=$player; else printf "invalid position" playerTurn; fi
-      ;;
-	9)
-      if [[ ${board[2,2]} == " " ]]; then board[2,2]=$player; else printf "invalid position" playerTurn; fi
-      ;;
-	esac
+	for (( i=0; i<NOOFROW; i++ ))
+	do
+		for (( j=0; j<NOOFROW; j++ ))
+		do
+			if [[ $count == $pos ]]
+			then
+				if [[ ${board[$i,$j]} == " " ]]
+				then
+					board[$i,$j]=$player
+				else
+					printf "invalid position" 
+					playerTurn
+				fi
+			fi
+			((count++))
+		done
+	done
 
 	((playCount++))
 	getBoard
@@ -158,95 +148,34 @@ function playerTurn(){
 }
 
 function computerTurn(){
+	count=1
    if [[ $playCount == $TOTALCOUNT ]]
    then
       echo "Match tie"
+		exit
    fi
 	printf "computer turn\n"
    pos=$((RANDOM%9 + 1))
-   case $pos in
-   1)
-      if [[ ${board[0,0]} == " " ]]
-		then
-			board[0,0]=$computer 
-		else
-			printf "invalid position"
-			computerTurn
-		fi
-      ;;
-   2)
-      if [[ ${board[0,1]} == " " ]]
-		then
-			board[0,1]=$computer
-		else
-			printf "invalid position"
-			computerTurn
-		fi
-      ;;
-   3)
-      if [[ ${board[0,2]} == " " ]]
-		then
-			board[0,2]=$computer
-		else
-			printf "invalid position"
-			computerTurn
-		fi
-      ;;
-   4)
-      if [[ ${board[1,0]} == " " ]]
-		then
-			board[1,0]=$computer
-		else
-			printf "invalid position"
-			computerTurn
-		fi
-      ;;
-   5)
-      if [[ ${board[1,1]} == " " ]]
-		then
-			board[1,1]=$computer
-		else
-			printf "invalid position"
-			computerTurn
-		fi
-      ;;
-   6)
-      if [[ ${board[1,2]} == " " ]]
-		then
-			board[1,2]=$computer
-		else
-			printf "invalid position"
-			computerTurn
-		fi
-      ;;
-   7)
-      if [[ ${board[2,0]} == " " ]]
-		then
-			board[2,0]=$computer
-		else
-			printf "invalid position"
-			computerTurn
-		fi
-      ;;
-   8)
-      if [[ ${board[2,1]} == " " ]]
-		then
-			board[2,1]=$computer
-		else
-			printf "invalid position"
-			computerTurn
-		fi
-      ;;
-   9)
-      if [[ ${board[2,2]} == " " ]]
-		then
-			board[2,2]=$computer
-		else
-			printf "invalid position"
-			computerTurn
-		fi
-      ;;
-   esac
+   for (( i=0; i<NOOFROW; i++ ))
+   do
+      for (( j=0; j<NOOFROW; j++ ))
+      do
+			if [[ $count == $pos ]]
+			then
+      		if [[ ${board[$i,$j]} == " " ]]
+				then
+					if [[ $(checkPlayerWin $computer) == false ]]
+					then
+						board[$i,$j]=$computer
+					fi
+				else
+					printf "invalid position"
+					computerTurn
+				fi
+			fi
+			((count++))
+      done
+	done
 
    ((playCount++))
 	getBoard
@@ -256,6 +185,117 @@ function computerTurn(){
 		exit
    fi
    playerTurn
+}
+
+function checkPlayerWin(){
+	layerLetter=$1
+	flag=false
+	for (( i=0; i<NOOFROW; i++ ))
+	do
+		if [[ ${board[$i,0]}${board[$i,1]} == $layerLetter$layerLetter && ${board[$i,2]} == " " ]]
+		then
+			if [[ ${board[$i,2]} == " " ]]
+			then
+				board[$i,2]=$layerLetter
+				flag=true
+				echo "$flag"
+			fi
+		elif [[ (${board[$i,0]}${board[$i,2]} == $layerLetter$layerLetter) && ${board[$i,1]} == " " ]]
+      then
+			if [[ ${board[$i,1]} == " " ]]
+			then
+         	board[$i,1]=$layerLetter
+				flag=true
+         	echo "$flag"
+			fi
+		elif [[ (${board[$i,1]}${board[$i,2]} == $layerLetter$layerLetter) && ${board[$i,0]} == " " ]]
+      then
+			if [[ ${board[$i,0]} == " " ]]
+         then
+         	board[$i,0]=$layerLetter
+				flag=true
+         	echo "$flag"
+			fi
+		fi
+	done
+	for (( j=0; j<NOOFROW; j++ ))
+   do
+      if [[ (${board[0,$j]}${board[1,$j]} == $layerLetter$layerLetter) && ${board[2,$j]} == " " ]]
+      then
+			if [[ ${board[2,$j]} == " " ]]
+         then
+         	board[2,$j]=$layerLetter
+				flag=true
+         	echo "$flag"
+			fi
+      elif [[ (${board[0,$j]}${board[2,$j]} == $layerLetter$layerLetter) && ${board[1,$j]} == " " ]]
+      then
+			if [[ ${board[1,$j]} == " " ]]
+         then
+         	board[1,$j]=$layerLetter
+				flag=true
+         	echo "$flag"
+			fi
+      elif [[ (${board[1,$j]}${board[2,$j]} == $layerLetter$layerLetter) && ${board[0,$j]} == " " ]]
+      then
+			if [[ ${board[0,$j]} == " " ]]
+         then
+         	board[0,$j]=$layerLetter
+				flag=true
+         	echo "$flag"
+			fi
+      fi
+   done
+	if [[ (${board[0,0]}${board[1,1]} == $layerLetter$layerLetter) && ${board[2,2]} == " " ]]
+   then
+		if [[ ${board[2,2]} == " " ]]
+      then
+   		board[2,2]=$layerLetter
+			flag=true
+      	echo "$flag"
+		fi
+  	elif [[ (${board[0,0]}${board[2,2]} == $layerLetter$layerLetter) && ${board[1,1]} == " " ]]
+   then
+		if [[ ${board[1,1]} == " " ]]
+      then
+     		board[1,1]=$layerLetter
+			flag=true
+      	echo "$flag"
+		fi
+   elif [[ (${board[1,1]}${board[2,2]} == $layerLetter$layerLetter) && ${board[0,0]} == " " ]]
+  	then
+		if [[ ${board[0,0]} == " " ]]
+      then
+     		board[0,0]=$layerLetter
+			flag=true
+      	echo "$flag"
+		fi
+	elif [[ (${board[0,2]}${board[1,1]} == $layerLetter$layerLetter) && ${board[2,0]} == " " ]]
+   then
+		if [[ ${board[2,0]} == " " ]]
+      then
+      	board[2,0]=$layerLetter
+			flag=true
+      	echo "$flag"
+		fi
+   elif [[ (${board[0,2]}${board[2,0]} == $layerLetter$layerLetter) && ${board[1,1]} == " " ]]
+   then
+		if [[ ${board[1,1]} == " " ]]
+      then
+      	board[1,1]=$layerLetter
+			flag=true
+      	echo "$flag"
+		fi
+   elif [[ (${board[1,1]}${board[2,0]} == $layerLetter$layerLetter) && ${board[0,2]} == " " ]]
+   then
+		if [[ ${board[0,2]} == " " ]]
+      then
+      	board[0,2]=$layerLetter
+			flag=true
+      	echo "$flag"
+		fi
+	fi
+	echo "$flag"
 }
 
 function toss(){
