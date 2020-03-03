@@ -5,6 +5,7 @@ echo "Welcome"
 #CONSTANT VARIABLES
 NOOFROW=3
 NOOFCOL=3
+TOTALCOUNT=9
 
 #VARIABLES
 declare -A board
@@ -17,7 +18,7 @@ function resetBoard(){
 	do
 		for (( column=0; column<NOOFCOL; column++ ))
 		do
-			board[$row,$column]=""
+			board[$row,$column]=" "
 		done
 	done
 }
@@ -25,23 +26,14 @@ function resetBoard(){
 function assignLetter(){
 	if (( $letter == 1 ))
 	then
-		player1="O"
-		player2="X"
+		player="O"
+		computer="X"
 	else
-		player1="X"
-		player2="O"
+		player="X"
+		computer="O"
 	fi
-	echo "Player1 assigned : $player1"
-	echo "Player2 assigned : $player2"
-}
-
-function toss(){
-	if (( $toss == 1 ))
-	then
-		echo "player1 won the toss"
-	else
-		echo "player2 won the toss"
-	fi
+	printf "Player assigned : $player\n"
+	printf "Computer assigned : $computer\n"
 }
 
 function getBoard(){
@@ -51,7 +43,7 @@ function getBoard(){
       do
          if (( column<2 ))
          then
-            printf "${board[$row,$column]} | "
+            printf "${board[$row,$column]}|"
          else
             printf "${board[$row,$column]}"
          fi
@@ -61,6 +53,7 @@ function getBoard(){
          printf "\n-----------\n"
       fi
    done
+	printf "\n"
 }
 
 function checkWin(){
@@ -75,6 +68,7 @@ function checkWin(){
 		then
 			flag=true
 			echo "$flag"
+			return
 		fi
 		((column++))
 	done
@@ -88,6 +82,7 @@ function checkWin(){
 		then
 			flag=true
 			echo "$flag"
+			return
 		fi
 		((row++))
 	done
@@ -99,6 +94,7 @@ function checkWin(){
 	then
 		flag=true
 		echo "$flag"
+		return
 	fi
 
 	row=0
@@ -108,13 +104,171 @@ function checkWin(){
 	then
 		flag=true
 		echo "$flag"
+		return
 	fi
 
 	echo "$flag"
 }
 
+function playerTurn(){
+	if [[ $playCount == $TOTALCOUNT ]]
+	then
+		echo "Match tie"
+	fi
+	printf "player turn\n"
+	read -p "Enter position : " pos
+	case $pos in
+	1)
+		if [[ ${board[0,0]} == " " ]]; then board[0,0]=$player; else printf "invalid position" playerTurn; fi
+		;;
+	2)
+      if [[ ${board[0,1]} == " " ]]; then board[0,1]=$player; else printf "invalid position" playerTurn; fi
+      ;;
+	3)
+      if [[ ${board[0,2]} == " " ]]; then board[0,2]=$player; else printf "invalid position" playerTurn; fi
+      ;;
+	4)
+      if [[ ${board[1,0]} == " " ]]; then board[1,0]=$player; else printf "invalid position" playerTurn; fi
+      ;;
+	5)
+      if [[ ${board[1,1]} == " " ]]; then board[1,1]=$player; else printf "invalid position" playerTurn; fi
+      ;;
+	6)
+      if [[ ${board[1,2]} == " " ]]; then board[1,2]=$player; else printf "invalid position" playerTurn; fi
+      ;;
+	7)
+      if [[ ${board[2,0]} == " " ]]; then board[2,0]=$player; else printf "invalid position" playerTurn; fi
+      ;;
+	8)
+      if [[ ${board[2,1]} == " " ]]; then board[2,1]=$player; else printf "invalid position" playerTurn; fi
+      ;;
+	9)
+      if [[ ${board[2,2]} == " " ]]; then board[2,2]=$player; else printf "invalid position" playerTurn; fi
+      ;;
+	esac
+
+	((playCount++))
+	getBoard
+	if [[ $(checkWin $player) == true ]]
+	then
+		echo "player won"
+		exit
+	fi
+	computerTurn
+}
+
+function computerTurn(){
+   if [[ $playCount == $TOTALCOUNT ]]
+   then
+      echo "Match tie"
+   fi
+	printf "computer turn\n"
+   pos=$((RANDOM%9 + 1))
+   case $pos in
+   1)
+      if [[ ${board[0,0]} == " " ]]
+		then
+			board[0,0]=$computer 
+		else
+			printf "invalid position"
+			computerTurn
+		fi
+      ;;
+   2)
+      if [[ ${board[0,1]} == " " ]]
+		then
+			board[0,1]=$computer
+		else
+			printf "invalid position"
+			computerTurn
+		fi
+      ;;
+   3)
+      if [[ ${board[0,2]} == " " ]]
+		then
+			board[0,2]=$computer
+		else
+			printf "invalid position"
+			computerTurn
+		fi
+      ;;
+   4)
+      if [[ ${board[1,0]} == " " ]]
+		then
+			board[1,0]=$computer
+		else
+			printf "invalid position"
+			computerTurn
+		fi
+      ;;
+   5)
+      if [[ ${board[1,1]} == " " ]]
+		then
+			board[1,1]=$computer
+		else
+			printf "invalid position"
+			computerTurn
+		fi
+      ;;
+   6)
+      if [[ ${board[1,2]} == " " ]]
+		then
+			board[1,2]=$computer
+		else
+			printf "invalid position"
+			computerTurn
+		fi
+      ;;
+   7)
+      if [[ ${board[2,0]} == " " ]]
+		then
+			board[2,0]=$computer
+		else
+			printf "invalid position"
+			computerTurn
+		fi
+      ;;
+   8)
+      if [[ ${board[2,1]} == " " ]]
+		then
+			board[2,1]=$computer
+		else
+			printf "invalid position"
+			computerTurn
+		fi
+      ;;
+   9)
+      if [[ ${board[2,2]} == " " ]]
+		then
+			board[2,2]=$computer
+		else
+			printf "invalid position"
+			computerTurn
+		fi
+      ;;
+   esac
+
+   ((playCount++))
+	getBoard
+   if [[ $(checkWin $computer) == true ]]
+   then
+      printf "computer won"
+		exit
+   fi
+   playerTurn
+}
+
+function toss(){
+   if (( $toss == 1 ))
+   then
+      printf "player won the toss\n"
+		playerTurn
+   else
+      printf "Computer won the toss\n"
+		computerTurn
+   fi
+}
+
 resetBoard
 assignLetter
 toss
-getBoard
-checkWin $player1
