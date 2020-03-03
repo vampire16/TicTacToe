@@ -8,6 +8,7 @@ NOOFCOL=3
 
 #VARIABLES
 declare -A board
+letter=$((RANDOM%2))
 
 
 function resetBoard(){
@@ -19,4 +20,17 @@ function resetBoard(){
 		done
 	done
 }
+
+function assignLetter(){
+	if (( $letter == 1 ))
+	then
+		player1="O"
+		player2="X"
+	else
+		player1="X"
+		player2="O"
+	fi
+}
+
 resetBoard
+assignLetter
