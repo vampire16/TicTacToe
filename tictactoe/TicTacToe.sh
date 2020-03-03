@@ -31,6 +31,8 @@ function assignLetter(){
 		player1="X"
 		player2="O"
 	fi
+	echo "Player1 assigned : $player1"
+	echo "Player2 assigned : $player2"
 }
 
 function toss(){
@@ -42,6 +44,26 @@ function toss(){
 	fi
 }
 
+function getBoard(){
+   for (( row=0; row<NOOFROW; row++ ))
+   do
+      for (( column=0; column<NOOFCOL; column++ ))
+      do
+         if (( column<2 ))
+         then
+            printf "${board[$row,$column]} | "
+         else
+            printf "${board[$row,$column]}"
+         fi
+      done
+      if (( row<2 ))
+      then
+         printf "\n-----------\n"
+      fi
+   done
+}
+
 resetBoard
 assignLetter
 toss
+getBoard
