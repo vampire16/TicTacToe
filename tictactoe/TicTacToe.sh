@@ -428,6 +428,14 @@ function checkCornerAvailable(){
 	fi
 }
 
+function checkCenter(){
+	if [[ ${board[1,1]} == " " ]]
+	then
+		board[1,1]=$computer
+		flag3="true"
+	fi
+}
+
 function computerTurn(){
 	flag="false"
 	flag1="false"
@@ -453,24 +461,28 @@ function computerTurn(){
 			checkCornerAvailable
 			if [[ $flag2 == "false" ]]
 			then
-   			pos=$((RANDOM%9 + 1))
-   			for (( i=0; i<$NOOFROW; i++ ))
-   			do
-      			for (( j=0; j<$NOOFROW; j++ ))
-      			do
-						if [[ $count == $pos ]]
-						then
-      					if [[ ${board[$i,$j]} == " " ]]
+				checkCenter
+				if [[ $flag3 == "false" ]]
+				then
+   				pos=$((RANDOM%9 + 1))
+   				for (( i=0; i<$NOOFROW; i++ ))
+   				do
+      				for (( j=0; j<$NOOFROW; j++ ))
+      				do
+							if [[ $count == $pos ]]
 							then
-								board[$i,$j]=$computer
-							else
-								printf "invalid position"
-								computerTurn
+      						if [[ ${board[$i,$j]} == " " ]]
+								then
+									board[$i,$j]=$computer
+								else
+									printf "invalid position"
+									computerTurn
+								fi
 							fi
-						fi
-						((count++))
-      			done
-				done
+							((count++))
+      				done
+					done
+				fi
 			fi
 		fi
 	fi
