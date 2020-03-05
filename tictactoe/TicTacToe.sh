@@ -408,11 +408,30 @@ function checkPlayerLoss(){
    #echo "$layerLetter"
 }
 
-
+function checkCornerAvailable(){
+	if [[ ${board[0,0]} == " " ]]
+	then
+		board[0,0]=$computer
+		flag2="true"
+	elif [[ ${board[0,2]} == " " ]]
+	then
+		board[0,2]=$computer
+		flag2="true"
+	elif [[ ${board[2,0]} == " " ]]
+	then
+		board[2,0]=$computer
+		flag2="true"
+	elif [[ ${board[2,2]} == " " ]]
+	then
+		board[2,2]=$computer
+		flag2="true"
+	fi
+}
 
 function computerTurn(){
 	flag="false"
 	flag1="false"
+	flag2="false"
 	count=1
    if [[ $playCount == $TOTALCOUNT ]]
    then
@@ -431,24 +450,28 @@ function computerTurn(){
 		checkPlayerLoss $player
 		if [[ $flag1 == "false" ]]
 		then
-   		pos=$((RANDOM%9 + 1))
-   		for (( i=0; i<$NOOFROW; i++ ))
-   		do
-      		for (( j=0; j<$NOOFROW; j++ ))
-      		do
-					if [[ $count == $pos ]]
-					then
-      				if [[ ${board[$i,$j]} == " " ]]
+			checkCornerAvailable
+			if [[ $flag2 == "false" ]]
+			then
+   			pos=$((RANDOM%9 + 1))
+   			for (( i=0; i<$NOOFROW; i++ ))
+   			do
+      			for (( j=0; j<$NOOFROW; j++ ))
+      			do
+						if [[ $count == $pos ]]
 						then
-							board[$i,$j]=$computer
-						else
-							printf "invalid position"
-							computerTurn
+      					if [[ ${board[$i,$j]} == " " ]]
+							then
+								board[$i,$j]=$computer
+							else
+								printf "invalid position"
+								computerTurn
+							fi
 						fi
-					fi
-					((count++))
-      		done
-			done
+						((count++))
+      			done
+				done
+			fi
 		fi
 	fi
    ((playCount++))
