@@ -11,7 +11,6 @@ TOTALCOUNT=9
 declare -A board
 letter=$((RANDOM%2))
 toss=$((RANDOM%2))
-flag="false"
 
 function resetBoard(){
 	for (( row=0; row<$NOOFROW; row++ ))
@@ -41,17 +40,9 @@ function getBoard(){
    do
       for (( column=0; column<$NOOFCOL; column++ ))
       do
-         if (( column<2 ))
-         then
-            printf "${board[$row,$column]}|"
-         else
-            printf "${board[$row,$column]}"
-         fi
+         if (( column<2 )); then printf "${board[$row,$column]}|"; else printf "${board[$row,$column]}"; fi
       done
-      if (( row<2 ))
-      then
-         printf "\n-----------\n"
-      fi
+      if (( row<2 )); then printf "\n------\n"; fi
    done
 	printf "\n"
 }
@@ -158,8 +149,6 @@ function checkComputerWin(){
             board[$i,2]="$computer"
             flag="true"
 				break
-            #echo "$flag"
-            #return
          fi
       elif [[ ${board[$i,0]}${board[$i,2]} == $computer$computer ]]
       then
@@ -168,8 +157,6 @@ function checkComputerWin(){
             board[$i,1]="$computer"
             flag="true"
 				break
-            #echo "$flag"
-            #return
          fi
       elif [[ ${board[$i,1]}${board[$i,2]} == $computer$computer ]]
       then
@@ -178,8 +165,6 @@ function checkComputerWin(){
             board[$i,0]="$computer"
             flag="true"
 				break
-            #echo "$flag"
-            #return
          fi
       elif [[ ${board[0,$i]}${board[1,$i]} == $computer$computer ]]
       then
@@ -188,8 +173,6 @@ function checkComputerWin(){
             board[2,$i]="$computer"
             flag="true"
 				break
-            #echo "$flag"
-            #return
          fi
       elif [[ ${board[0,$i]}${board[2,$i]} == $computer$computer ]]
       then
@@ -198,8 +181,6 @@ function checkComputerWin(){
             board[1,$i]="$computer"
             flag="true"
 				break
-            #echo "$flag"
-            #return
          fi
       elif [[ ${board[1,$i]}${board[2,$i]} == $computer$computer ]]
       then
@@ -208,8 +189,6 @@ function checkComputerWin(){
             board[0,$i]="$computer"
             flag="true"
 				break
-            #echo "$flag"
-            #return
          fi
    elif [[ ${board[0,0]}${board[1,1]} == $computer$computer ]]
    then
@@ -219,8 +198,6 @@ function checkComputerWin(){
 
          flag="true"
 			break
-         #echo "$flag"
-         #return
       fi
    elif [[ ${board[0,0]}${board[2,2]} == $computer$computer ]]
    then
@@ -229,8 +206,6 @@ function checkComputerWin(){
          board[1,1]="$computer"
          flag="true"
 			break
-         #echo "$flag"
-         #return
       fi
    elif [[ ${board[1,1]}${board[2,2]} == $computer$computer ]]
    then
@@ -239,8 +214,6 @@ function checkComputerWin(){
          board[0,0]="$computer"
          flag="true"
 			break
-         #echo "$flag"
-         #return
       fi
    elif [[ ${board[0,2]}${board[1,1]} == $computer$computer ]]
    then
@@ -249,8 +222,6 @@ function checkComputerWin(){
          board[2,0]="$computer"
          flag="true"
 			break
-         #echo "$flag"
-         #return
       fi
    elif [[ ${board[0,2]}${board[2,0]} == $computer$computer ]]
    then
@@ -259,8 +230,6 @@ function checkComputerWin(){
          board[1,1]="$computer"
          flag="true"
 			break
-         #echo "$flag"
-         #return
       fi
    elif [[ ${board[1,1]}${board[2,0]} == $computer$computer ]]
    then
@@ -269,13 +238,9 @@ function checkComputerWin(){
          board[0,2]="$computer"
          flag="true"
 			break
-         #echo "$flag"
-         #return
       fi
    fi
    done
-   #echo "$flag"
-	#echo "$layerLetter"
 }
 
 function checkPlayerLoss(){
@@ -289,8 +254,6 @@ function checkPlayerLoss(){
             board[$i,2]="$computer"
             flag1="true"
             break
-            #echo "$flag"
-            #return
          fi
       elif [[ ${board[$i,0]}${board[$i,2]} == $player$player ]]
       then
@@ -299,8 +262,6 @@ function checkPlayerLoss(){
             board[$i,1]="$computer"
             flag1="true"
             break
-            #echo "$flag"
-            #return
          fi
       elif [[ ${board[$i,1]}${board[$i,2]} == $player$player ]]
       then
@@ -309,8 +270,6 @@ function checkPlayerLoss(){
             board[$i,0]="$computer"
             flag1="true"
             break
-            #echo "$flag"
-            #return
          fi
       elif [[ ${board[0,$i]}${board[1,$i]} == $player$player ]]
       then
@@ -319,8 +278,6 @@ function checkPlayerLoss(){
             board[2,$i]="$computer"
             flag1="true"
             break
-            #echo "$flag"
-            #return
          fi
       elif [[ ${board[0,$i]}${board[2,$i]} == $player$player ]]
       then
@@ -329,8 +286,6 @@ function checkPlayerLoss(){
             board[1,$i]="$computer"
             flag1="true"
             break
-            #echo "$flag"
-            #return
          fi
       elif [[ ${board[1,$i]}${board[2,$i]} == $player$player ]]
       then
@@ -339,8 +294,6 @@ function checkPlayerLoss(){
             board[0,$i]="$computer"
             flag1="true"
             break
-            #echo "$flag"
-            #return
          fi
    elif [[ ${board[0,0]}${board[1,1]} == $player$player ]]
    then
@@ -349,8 +302,6 @@ function checkPlayerLoss(){
          board[2,2]="$computer"
          flag1="true"
          break
-         #echo "$flag"
-         #return
       fi
    elif [[ ${board[0,0]}${board[2,2]} == $player$player ]]
    then
@@ -359,8 +310,6 @@ function checkPlayerLoss(){
          board[1,1]="$computer"
          flag1="true"
          break
-         #echo "$flag"
-         #return
       fi
    elif [[ ${board[1,1]}${board[2,2]} == $player$player ]]
    then
@@ -369,8 +318,6 @@ function checkPlayerLoss(){
          board[0,0]="$computer"
          flag1="true"
          break
-         #echo "$flag"
-         #return
       fi
    elif [[ ${board[0,2]}${board[1,1]} == $player$player ]]
    then
@@ -379,8 +326,6 @@ function checkPlayerLoss(){
          board[2,0]="$computer"
          flag1="true"
          break
-         #echo "$flag"
-         #return
       fi
    elif [[ ${board[0,2]}${board[2,0]} == $player$player ]]
    then
@@ -389,8 +334,6 @@ function checkPlayerLoss(){
          board[1,1]="$computer"
          flag1="true"
          break
-         #echo "$flag"
-         #return
       fi
    elif [[ ${board[1,1]}${board[2,0]} == $player$player ]]
    then
@@ -399,13 +342,9 @@ function checkPlayerLoss(){
          board[0,2]="$computer"
          flag1="true"
          break
-         #echo "$flag"
-         #return
       fi
    fi
    done
-   #echo "$flag"
-   #echo "$layerLetter"
 }
 
 function checkCornerAvailable(){
@@ -455,7 +394,6 @@ function checkSides(){
 		flag4="true"
 	fi
 }
-
 
 function computerTurn(){
 	flag="false"
@@ -521,8 +459,6 @@ function computerTurn(){
    fi
    playerTurn
  }
-
-
 
 function toss(){
    if (( $toss == 1 ))
