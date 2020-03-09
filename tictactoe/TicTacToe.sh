@@ -3,9 +3,9 @@
 echo "Welcome"
 
 #CONSTANT VARIABLES
-NOOFROW=3
-NOOFCOL=3
-TOTALCOUNT=9
+NO_OF_ROW=3
+NO_OF_COL=3
+TOTAL_COUNT=9
 
 #VARIABLES
 declare -A board
@@ -13,17 +13,17 @@ letter=$((RANDOM%2))
 toss=$((RANDOM%2))
 flag="false"
 
-function resetBoard(){
-	for (( row=0; row<$NOOFROW; row++ ))
+function getResetBoard(){
+	for (( row=0; row<$NO_OF_ROW; row++ ))
 	do
-		for (( column=0; column<$NOOFCOL; column++ ))
+		for (( column=0; column<$NO_OF_COL; column++ ))
 		do
 			board[$row,$column]=" "
 		done
 	done
 }
 
-function assignLetter(){
+function getAssignLetter(){
 	if (( $letter == 1 ))
 	then
 		player="O"
@@ -37,9 +37,9 @@ function assignLetter(){
 }
 
 function getBoard(){
-   for (( row=0; row<$NOOFROW; row++ ))
+   for (( row=0; row<$NO_OF_ROW; row++ ))
    do
-      for (( column=0; column<$NOOFCOL; column++ ))
+      for (( column=0; column<$NO_OF_COL; column++ ))
       do
          if (( column<2 ))
          then
@@ -62,7 +62,7 @@ function checkWin(){
 	column=0
 	flag=false
 
-	while [ $column -lt $NOOFCOL ]
+	while [ $column -lt $NO_OF_COL ]
 	do
 		if [[ ${board[$row,$column]}${board[$(($row+1)),$column]}${board[$(($row+2)),$column]} == $playerLetter$playerLetter$playerLetter ]]
 		then
@@ -76,7 +76,7 @@ function checkWin(){
 	row=0
 	column=0
 
-	while [ $row -lt $NOOFROW ]
+	while [ $row -lt $NO_OF_ROW ]
 	do
 		if [[ ${board[$row,$column]}${board[$row,$(($column+1))]}${board[$row,$(($column+2))]} == $playerLetter$playerLetter$playerLetter ]]
 		then
@@ -112,7 +112,7 @@ function checkWin(){
 
 function playerTurn(){
 	count=1
-	if [[ $playCount == $TOTALCOUNT ]]
+	if [[ $playCount == $TOTAL_COUNT ]]
 	then
 		echo "Match tie"
 		exit
@@ -157,9 +157,7 @@ function checkComputerWin(){
          then
             board[$i,2]="$computer"
             flag="true"
-				break
-            #echo "$flag"
-            #return
+			   break
          fi
       elif [[ ${board[$i,0]}${board[$i,2]} == $computer$computer ]]
       then
@@ -168,8 +166,6 @@ function checkComputerWin(){
             board[$i,1]="$computer"
             flag="true"
 				break
-            #echo "$flag"
-            #return
          fi
       elif [[ ${board[$i,1]}${board[$i,2]} == $computer$computer ]]
       then
@@ -178,8 +174,6 @@ function checkComputerWin(){
             board[$i,0]="$computer"
             flag="true"
 				break
-            #echo "$flag"
-            #return
          fi
       elif [[ ${board[0,$i]}${board[1,$i]} == $computer$computer ]]
       then
@@ -188,8 +182,6 @@ function checkComputerWin(){
             board[2,$i]="$computer"
             flag="true"
 				break
-            #echo "$flag"
-            #return
          fi
       elif [[ ${board[0,$i]}${board[2,$i]} == $computer$computer ]]
       then
@@ -198,8 +190,6 @@ function checkComputerWin(){
             board[1,$i]="$computer"
             flag="true"
 				break
-            #echo "$flag"
-            #return
          fi
       elif [[ ${board[1,$i]}${board[2,$i]} == $computer$computer ]]
       then
@@ -208,19 +198,14 @@ function checkComputerWin(){
             board[0,$i]="$computer"
             flag="true"
 				break
-            #echo "$flag"
-            #return
          fi
    elif [[ ${board[0,0]}${board[1,1]} == $computer$computer ]]
    then
       if [[ ${board[2,2]} == " " ]]
       then
          board[2,2]="$computer"
-
          flag="true"
 			break
-         #echo "$flag"
-         #return
       fi
    elif [[ ${board[0,0]}${board[2,2]} == $computer$computer ]]
    then
@@ -229,8 +214,6 @@ function checkComputerWin(){
          board[1,1]="$computer"
          flag="true"
 			break
-         #echo "$flag"
-         #return
       fi
    elif [[ ${board[1,1]}${board[2,2]} == $computer$computer ]]
    then
@@ -239,8 +222,6 @@ function checkComputerWin(){
          board[0,0]="$computer"
          flag="true"
 			break
-         #echo "$flag"
-         #return
       fi
    elif [[ ${board[0,2]}${board[1,1]} == $computer$computer ]]
    then
