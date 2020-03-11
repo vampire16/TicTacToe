@@ -16,8 +16,8 @@ function getResetBoard(){
 	for (( row=0; row<$NO_OF_ROW; row++ )){
 		for (( column=0; column<$NO_OF_COL; column++ )){
 			board[$row,$column]=" " ;
-      }
-   }
+		}	
+	}
 }
 
 function getAssignLetter(){
@@ -27,12 +27,12 @@ function getAssignLetter(){
 }
 
 function getBoard(){
-   for (( row=0; row<$NO_OF_ROW; row++ )){
-      for (( column=0; column<$NO_OF_COL; column++ )){
-         (( column<2 )) && printf "${board[$row,$column]}|" || printf "${board[$row,$column]}"
-      }
-      (( row<2 )) && printf "\n-----------\n"
-   }
+	for (( row=0; row<$NO_OF_ROW; row++ )){
+		for (( column=0; column<$NO_OF_COL; column++ )){
+			(( column<2 )) && printf "${board[$row,$column]}|" || printf "${board[$row,$column]}"
+		}
+		(( row<2 )) && printf "\n-----------\n"
+	}
 	printf "\n"
 }
 
@@ -66,47 +66,47 @@ function checkWin(){
 	column=$(($column+2))
 
 	[[ ${board[$row,$column]}${board[$(($row+1)),$(($column-1))]}${board[$(($row+2)),$(($column-2))]} == $playerLetter$playerLetter$playerLetter ]] && { flag=true; echo "$flag"; return; }
-	
+
 	echo "$flag"
 }
 
 function checkComputerWin(){
-   symbol=$1
-   for (( i=0; i<$NO_OF_ROW; i++ )){
-      tempA=0
-      tempB=1
-      tempC=2
-      for (( j=0; j<$NO_OF_ROW; j++ )){
-         if [[ ${board[$i,$tempA]}${board[$i,$tempB]} == $symbol$symbol ]]
-         then
-            [[ ${board[$i,$tempC]} == " " ]] && { board[$i,$tempC]="$computer"; flag="true"; i=4; break; }
-         elif [[ ${board[$tempA,$i]}${board[$tempB,$i]} == $symbol$symbol ]]
-         then
-            [[ ${board[$tempC,$i]} == " " ]] && { board[$tempC,$i]="$computer"; flag="true"; i=4; break; }
-         elif [[ ${board[$tempA,$tempA]}${board[$tempB,$tempB]} == $symbol$symbol ]]
-         then
-            [[ ${board[$tempC,$tempC]} == " " ]] && { board[$tempC,$tempC]="$computer"; flag="true"; i=4; break; }
-         elif [[ ${board[0,2]}${board[1,1]} == $symbol$symbol ]]
-         then
-            [[ ${board[2,0]} == " " ]] && { board[2,0]="$computer"; flag="true"; i=4; break; }
-         elif [[ ${board[0,2]}${board[2,0]} == $symbol$symbol ]]
-         then
-            [[ ${board[1,1]} == " " ]] && { board[1,1]="$computer"; flag="true"; i=4; break; }
-         elif [[ ${board[1,1]}${board[2,0]} == $symbol$symbol ]]
-         then
-            [[ ${board[0,2]} == " " ]] && { board[0,2]="$computer"; flag="true"; i=4; break; }
-         fi
-         temp=$tempA
-         tempA=$tempB
-         tempB=$tempC
-         tempC=$temp
-      }
-   }
-   [[ $symbol == $player ]] && flag1=$flag 
+	symbol=$1
+	for (( i=0; i<$NO_OF_ROW; i++ )){
+	tempA=0
+	tempB=1
+	tempC=2
+	for (( j=0; j<$NO_OF_ROW; j++ )){
+		if [[ ${board[$i,$tempA]}${board[$i,$tempB]} == $symbol$symbol ]]
+		then
+			[[ ${board[$i,$tempC]} == " " ]] && { board[$i,$tempC]="$computer"; flag="true"; i=4; break; }
+		elif [[ ${board[$tempA,$i]}${board[$tempB,$i]} == $symbol$symbol ]]
+		then
+			[[ ${board[$tempC,$i]} == " " ]] && { board[$tempC,$i]="$computer"; flag="true"; i=4; break; }
+		elif [[ ${board[$tempA,$tempA]}${board[$tempB,$tempB]} == $symbol$symbol ]]
+		then
+			[[ ${board[$tempC,$tempC]} == " " ]] && { board[$tempC,$tempC]="$computer"; flag="true"; i=4; break; }
+		elif [[ ${board[0,2]}${board[1,1]} == $symbol$symbol ]]
+		then
+			[[ ${board[2,0]} == " " ]] && { board[2,0]="$computer"; flag="true"; i=4; break; }
+		elif [[ ${board[0,2]}${board[2,0]} == $symbol$symbol ]]
+		then
+			[[ ${board[1,1]} == " " ]] && { board[1,1]="$computer"; flag="true"; i=4; break; }
+		elif [[ ${board[1,1]}${board[2,0]} == $symbol$symbol ]]
+		then
+			[[ ${board[0,2]} == " " ]] && { board[0,2]="$computer"; flag="true"; i=4; break; }
+		fi
+		temp=$tempA
+		tempA=$tempB
+		tempB=$tempC
+		tempC=$temp
+		}
+	}
+	[[ $symbol == $player ]] && flag1=$flag 
 }
 
 function checkPlayerLoss(){
-   checkComputerWin $player
+	checkComputerWin $player
 }
 
 function checkCornerAvailable(){
@@ -161,12 +161,12 @@ function playerTurn(){
 	for (( i=0; i<$NO_OF_ROW; i++ )){ 
 		for (( j=0; j<$NO_OF_ROW; j++ )){
 			if [[ $count == $pos ]] 
-         then  
-            [[ ${board[$i,$j]} == " " ]] && board[$i,$j]=$player || { printf "Invalid position \n"; playerTurn; }
-         fi
+			then  
+				[[ ${board[$i,$j]} == " " ]] && board[$i,$j]=$player || { printf "Invalid position \n"; playerTurn; }
+			fi
 			((count++))
-      }
-   }
+		}
+	}
 	((playCount++))
 	getBoard
 	[[ $(checkWin $player) == true ]] && { echo "Player won"; exit; }
@@ -175,12 +175,12 @@ function playerTurn(){
 
 function computerTurn(){
 	count=1
-   flag="false"
-   flag1="false"
-   flag2="false"
-   flag3="false"
-   flag4="false"
-   [[ $playCount == $TOTAL_COUNT ]] && { echo "Match tie"; exit; }
+	flag="false"
+	flag1="false"
+	flag2="false"
+	flag3="false"
+	flag4="false"
+	[[ $playCount == $TOTAL_COUNT ]] && { echo "Match tie"; exit; }
 	printf "Computer turn\n"
 	checkComputerWin $computer
 	if [[ $flag == "true" ]]
@@ -191,15 +191,15 @@ function computerTurn(){
 	else
 		checkPlayerLoss $player
 		[[ $flag1 == "false" ]] && { checkCornerAvailable; [[ $flag2 == "false" ]] && { checkCenter; [[ $flag3 == "false" ]] && checkSides; } }
-   fi
-   ((playCount++))
-   getBoard
-   [[ $(checkWin $computer) == true ]] && { printf "Computer won"; exit; }
-   playerTurn
+	fi
+	((playCount++))
+	getBoard
+	[[ $(checkWin $computer) == true ]] && { printf "Computer won"; exit; }
+	playerTurn
 }
 
 function toss(){
-    (( $toss == 1 )) && { printf "Player won the toss\n"; playerTurn;} || { printf "Computer won the toss\n"; computerTurn; }  
+(( $toss == 1 )) && { printf "Player won the toss\n"; playerTurn;} || { printf "Computer won the toss\n"; computerTurn; }  
 }
 
 getResetBoard
